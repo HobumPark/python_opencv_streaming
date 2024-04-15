@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/static/css/videoGroup3.css" type="text/css">
+    <title>한국 펜션</title>
+    <script>
+        function makeFullScreen(){
+            alert("풀스크린!")
+            //document.getElementById("full-popup").style.display="block";
+
+        }
+        function closeFullPopUp(){
+            //document.getElementById("full-popup").style.display="none";
+        }
+    </script>
+</head>
+<body>
+
+    <div id="wrap">
+
+        <div id="wrap-inner-top">
+            <div id="display-area">
+                <h1>웹 영상 관제 사이트</h1>
+                {% if start_index == end_index %}
+                    <div class="video" onclick="makeFullScreen()">
+                        <img src="{{ url_for('videoGroup3API.video_feed',video_src=video_list[start_index]) }}" width="100%">
+                    </div>
+                {% else %}
+                    {% for i in range(start_index,end_index) %}
+                    <div class="video" onclick="makeFullScreen()" id="video{{i}}">
+                        <img src="{{ url_for('videoGroup3API.video_feed',video_src=video_list[i]) }}" width="100%">
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="side-bar">
+                <div>CCTV영상 갯수:{{video_len}}</div>
+                <div>페이지 당 갯수:{{video_per_page}}</div>
+                <div>현재 페이지:{{current_page}}</div>
+                <div>총 페이지 수:{{page_len}}</div>
+            </div>
+        </div>
+        <div id="wrap-inner-bottom">
+            <div id="bottom-center">
+                <!--이전-->
+                {% if current_page == 1 %}
+                <span class="page">
+                    <a href="{{url_for('videoGroup3API.video_root', page=1)}}">&lt;</a>
+                </span>
+                {% else %}
+                <span class="page">
+                    <a href="{{url_for('videoGroup3API.video_root', page=current_page-1)}}">&lt;</a>
+                </span>
+                {% endif %}
+                <!--페이지 번호 1~N-->
+                {% for i in range(1,page_len+1) %}
+                <span class="page">
+                    <a href="{{url_for('videoGroup3API.video_root', page=i)}}">{{i}}</a>
+                </span>
+                {% endfor %}
+
+                <!--다음-->
+                {% if current_page == page_len %}
+                <span class="page">
+                    <a href="{{url_for('videoGroup3API.video_root', page=page_len)}}">&gt;</a>
+                </span>
+                {% else %}
+                <span class="page">
+                    <a href="{{url_for('videoGroup3API.video_root', page=current_page+1)}}">&gt;</a>
+                </span>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
